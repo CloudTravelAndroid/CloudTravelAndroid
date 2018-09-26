@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
@@ -24,6 +25,8 @@
 /nbdist/
 /.nb-gradle/
 
+=======
+>>>>>>> ebe50430b5096801d6ae09cb64f2de224bcd828f
 # Built application files
 *.apk
 *.ap_
@@ -89,6 +92,7 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+<<<<<<< HEAD
 
 .gradle
 /build/
@@ -101,3 +105,5 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+=======
+>>>>>>> ebe50430b5096801d6ae09cb64f2de224bcd828f
