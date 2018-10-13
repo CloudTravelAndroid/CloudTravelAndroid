@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/moments_item_head_portrait"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_marginTop="2dp"
+            android:padding="5dp"
+            android:src="@drawable/moment_head_portrait"
+            android:layout_marginStart="15sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textSize="24sp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:textSize="18sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:text="  此处不可超过...字此处不可超过...字此处不可超过...字此处不可超过...字此处不可超过...字此处不可超过...字此处不可超过...字此处不可超过...字此处不可超过...字此处不可超过...字"
+        android:textSize="16sp"
+        android:singleLine="false"
+        android:maxLines="10"
+        android:ellipsize="end"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="10dp"
+        android:textColor="@color/my_blue"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/banner_image_italy"/>
+
+    <View
+        android:layout_width="340dp"
+        android:layout_height="1dp"
+        android:background="@color/my_grey_blue"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/moment_icon_share"
+            android:scaleType="centerInside"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/moment_icon_recommend"
+            android:scaleType="centerInside"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/moment_icon_support"
+            android:scaleType="centerInside"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#ffffff"/>
+</LinearLayout>

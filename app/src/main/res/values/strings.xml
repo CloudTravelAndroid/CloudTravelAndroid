@@ -1,3 +1,36 @@
 <resources>
-    <string name="app_name">cloudtravelandroid</string>
+    <string name="app_name">云游</string>
+
+    <string name="app_dialog_loading">努力加载中 &#8230;</string>
+    <string name="app_dialog_cancel">取消</string>
+    <string name="app_dialog_retry_msg">请求失败！</string>
+    <string name="app_dialog_retry_positive_btn">重试</string>
+    <string name="app_dialog_title_tips">温馨提示</string>
+    <string name="app_dialog_title_ip_list">请输入网址和IP</string>
+    <string name="app_request_error">网络错误，请稍后再试</string>
+    <string name="app_request_fail">请求失败，请稍后再试</string>
+    <string name="app_request_unlogin">未登录，请登录重试</string>
+    <string name="collection">我的收藏</string>
+    <string name="personal_information">编辑个人信息</string>
+    <string name="setting">设置</string>
+    <string name="postbox">邮箱</string>
+    <string name="password">密码</string>
+    <string name="login">登陆</string>
+    <string name="forgetting">忘记密码？</string>
+    <string name="register">注册</string>
+    <string name="name">用户名</string>
+    <string name="confirming_name">确认密码</string>
+    <string name="existing">已有密码</string>
+    <string name="app_dialog_ok">OK</string>
+    <string name="date">2018年1月1日</string>
+    <string name="placeName">地点</string>
+    <string name="time">时间</string>
+    <string name="memo">备忘录</string>
+    <string name="year_title">2018</string>
+    <string name="month_title">1月</string>
+    <string name="create_schedule">生成路线图</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

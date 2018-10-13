@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/schedule_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="15dp"
+            android:text="New Schedule"
+            android:textSize="24sp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/myriad_pro_italic"/>
+
+        <TextView
+            android:id="@+id/place_name"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/edit_text_border"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/date_select_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Select Time"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/edit_text_border"
+                android:textAllCaps="false"/>
+
+            <TextView
+                android:id="@+id/date_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="12:34"
+                android:layout_marginStart="30dp"/>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/schedule_memo"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="@string/memo"
+            android:paddingBottom="180dp"
+            android:paddingLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:inputType="text"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_weight="1">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:src="@drawable/icon_back"
+            app:backgroundTint="#FF3E22"
+            app:rippleColor="#FF4A32"
+            app:fabSize="normal"
+            android:layout_alignParentStart="true"
+            android:scaleType="center"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/check_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_check"
+            app:backgroundTint="#4BCE49"
+            app:rippleColor="#32CD32"
+            app:fabSize="normal"
+            android:layout_marginEnd="60dp"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+</LinearLayout>

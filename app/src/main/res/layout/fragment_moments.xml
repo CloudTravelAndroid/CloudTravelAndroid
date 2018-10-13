@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_moments"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:id="@+id/moments_appBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:id="@+id/moments_collapsingToolbar">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/moments_bg"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/post_moment_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/moment_btn_post"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                app:backgroundTint="#5AB0CB"
+                app:fabSize="normal"
+                android:layout_gravity="end|top"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/moments_item_head_portrait"
+                android:layout_height="100dp"
+                android:layout_width="100dp"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                android:src="@drawable/head_portrait_example"
+                android:paddingBottom="40dp"
+                android:layout_gravity="end|bottom"/>
+
+            <TextView
+                android:text="Cloud Traveller"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/moments_name"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_gravity="end|bottom"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/moments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+</android.support.design.widget.CoordinatorLayout>

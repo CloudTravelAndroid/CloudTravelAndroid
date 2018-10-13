@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="year">
+        <item>2010年</item>
+        <item>2011年</item>
+        <item>2012年</item>
+        <item>2013年</item>
+        <item>2014年</item>
+        <item>2015年</item>
+        <item>2016年</item>
+        <item>2017年</item>
+        <item>2018年</item>
+        <item>2019年</item>
+        <item>2020年</item>
+        <item>2021年</item>
+        <item>2022年</item>
+        <item>2023年</item>
+    </string-array>
+</resources>

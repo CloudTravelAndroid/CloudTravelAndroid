@@ -1,0 +1,45 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:tag="rl_root">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?android:colorPrimary"
+        android:theme="@style/AppTheme"
+        android:id="@+id/tb_title_bar"
+        android:tag="tb_title_bar">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_title_bar_head_portrait"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="?attr/actionBarSize"
+            android:padding="8dp"
+            android:tag="civ_title_bar_head_portrait"
+            android:visibility="visible"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/tv_title"
+            android:textColor="@color/white"
+            android:text="标题"
+            android:tag="tv_title"
+            android:textSize="22sp"/>
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#999999"/>
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="fl_container"/>
+
+</LinearLayout>

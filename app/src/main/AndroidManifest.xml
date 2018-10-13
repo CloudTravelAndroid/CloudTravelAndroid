@@ -1,21 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cloudtravelapp.cloudtravelandroid">
+    package="com.cloudtravel.cloudtravelandroid">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
+        android:name=".base.CloudTravelBaseApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/app_icon_no_bg"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/app_icon_no_bg"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="RWS0kce9mugyCDw2HGqRDSAp5Y9r8fBv" />
+
+        <activity android:name=".main.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".main.activity.SearchActivity"></activity>
+        <activity
+            android:name=".main.activity.PlaceDetailedActivity"
+            android:theme="@style/PlaceSelectedActivityTheme" />
+        <activity android:name=".main.activity.AddScheduleActivity"></activity>
+        <activity android:name=".main.activity.UpdateScheduleActivity" />
+        <activity android:name=".main.activity.SignInActivity">
+
+        </activity>
+        <activity android:name=".main.activity.SignUpActivity" />
+        <activity android:name=".main.activity.RoadMapActivity" />
+        <activity android:name=".main.activity.TestActivity"></activity>
+        <activity android:name=".main.activity.WebViewActivity"></activity>
     </application>
 
 </manifest>
