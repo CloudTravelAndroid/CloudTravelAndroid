@@ -80,14 +80,9 @@ public class DiscoverFragment extends CloudTravelBaseFragment {
         bannerImages.add(R.drawable.banner_6);
         bannerImages.add(R.drawable.banner_7);
         bannerTitles = new ArrayList<>();
-        bannerTitles.add("0");
-        bannerTitles.add("1");
-        bannerTitles.add("2");
-        bannerTitles.add("3");
-        bannerTitles.add("4");
-        bannerTitles.add("5");
-        bannerTitles.add("6");
-        bannerTitles.add("7");
+        for (int i = 0; i < bannerImages.size(); i++) {
+            bannerTitles.add("");
+        }
         banner = view.findViewById(R.id.banner);
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE);
         banner.setImageLoader(new GlideImageLoader());
@@ -99,16 +94,16 @@ public class DiscoverFragment extends CloudTravelBaseFragment {
         banner.setIndicatorGravity(BannerConfig.CENTER);
         banner.start();
 
-        placeRcmdItemList.add(new PlaceRcmdItem("YZN in ECNU",
+        placeRcmdItemList.add(new PlaceRcmdItem("Zhenning Yang in ECNU",
                 "Shanghai", R.drawable.yzn, "http://www.smartshanghai.com/listings/dining/dim_sum/"));
-        placeRcmdItemList.add(new PlaceRcmdItem("Sports Meeting in ECNU",
+        placeRcmdItemList.add(new PlaceRcmdItem("67th Anniversary of ECNU",
+                "Shanghai", R.drawable.anniversary, "www.pretty-hotels.com/2248/?lang=en"));
+        placeRcmdItemList.add(new PlaceRcmdItem("2018 Sports Meeting in ECNU",
                 "Shanghai", R.drawable.sports_meeting, "https://www.tripadvisor.com/Attractions-g308272-Activities-c40-Shanghai.html"));
-        placeRcmdItemList.add(new PlaceRcmdItem("Li wa Restaurant",
+        placeRcmdItemList.add(new PlaceRcmdItem("Liwa Restaurant",
                 "Shanghai", R.drawable.liwa_restaurant_1, "https://impactnottingham.com/2013/10/shanghai-nights-and-smuggling-days/"));
         placeRcmdItemList.add(new PlaceRcmdItem("Autumn in ECNU",
                 "Shanghai", R.drawable.hsd_0, "http://www.timeoutshanghai.com/venue/shops__services-markets/726/south-bund-fabric-market.html"));
-        placeRcmdItemList.add(new PlaceRcmdItem("The 67th Anniversary of ECNU",
-                "Shanghai", R.drawable.anniversary, "www.pretty-hotels.com/2248/?lang=en"));
         placeRcmdItemList.add(new PlaceRcmdItem("A day to the ancient water town",
                 "Shanghai", R.drawable.ancient_watertown, "https://irene-travelogue.com/2011/12/22/a-day-to-the-ancient-watertown/"));
         recyclerView = view.findViewById(R.id.recycler_view);

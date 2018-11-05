@@ -48,6 +48,7 @@ public class MainActivity extends CloudTravelBaseActivity implements BottomNavig
     private TextView toolBarTitle;
     private TextView emailText;
     private TextView userNameText;
+    private ImageView selectUniversityImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +119,14 @@ public class MainActivity extends CloudTravelBaseActivity implements BottomNavig
         navigationHeaderLayout = navigationView.getHeaderView(0);
         emailText = navigationHeaderLayout.findViewById(R.id.user_email);
         userNameText = navigationHeaderLayout.findViewById(R.id.user_name);
+        selectUniversityImage = findViewById(R.id.tool_bar_select_university);
+        selectUniversityImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SelectUniversityActivity.class);
+                startActivity(intent);
+            }
+        });
         //getUserInfo();
 
     }

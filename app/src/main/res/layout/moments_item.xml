@@ -78,7 +78,7 @@
                 android:layout_height="200dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/banner_image_italy" />
+                android:src="@drawable/banner_0" />
 
             <View
                 android:layout_width="340dp"
