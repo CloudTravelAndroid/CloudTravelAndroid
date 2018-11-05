@@ -38,7 +38,7 @@ public class MomentsActivity extends CloudTravelBaseActivity {
         momentText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MomentActivity.this,MomentsDetailedActivity.class);
+                Intent intent = new Intent(MomentsActivity.this,MomentsDetailedActivity.class);
                 startActivity(intent);
             }
         });

@@ -31,7 +31,6 @@ public class MomentItemAdapter extends RecyclerView.Adapter<MomentItemAdapter.Vi
             nameText=view.findViewById(R.id.moments_item_name);
             contentText=view.findViewById(R.id.moments_item_content);
             timeText=view.findViewById(R.id.moments_item_time);
-            locationText=view.findViewById(R.id.moments_item_location);
         }
     }
 
