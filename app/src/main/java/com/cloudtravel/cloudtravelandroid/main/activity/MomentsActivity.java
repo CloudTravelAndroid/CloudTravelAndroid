@@ -16,7 +16,7 @@ import com.cloudtravel.cloudtravelandroid.main.request.SignInRequest;
 
 public class MomentsActivity extends CloudTravelBaseActivity {
 
-    private TextView momentText;
+    private TextView momentsText;
     private FloatingActionButton postButton;
 
     @Override
@@ -28,14 +28,15 @@ public class MomentsActivity extends CloudTravelBaseActivity {
 
     private void initView() {
         super.hideTitleBar();
-        postButton = findViewById(R.id.post_moment_button);
+        postButton = findViewById(R.id.post_moments_button);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SignInRequest request = new SignInRequest();
+                Intent intent = new Intent(MomentsActivity.this, PostMomentsActivity.class);
+                startActivity(intent);
             }
         });
-        momentText.setOnClickListener(new View.OnClickListener() {
+        momentsText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MomentsActivity.this, MomentsDetailedActivity.class);
