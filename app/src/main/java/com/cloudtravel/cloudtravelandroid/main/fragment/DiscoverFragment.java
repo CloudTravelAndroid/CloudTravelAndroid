@@ -99,18 +99,18 @@ public class DiscoverFragment extends CloudTravelBaseFragment {
         banner.setIndicatorGravity(BannerConfig.CENTER);
         banner.start();
 
-        placeRcmdItemList.add(new PlaceRcmdItem("5 amazing Dim Sum Restaurants in Shanghai",
-                "Shanghai", R.drawable.dim_sum_restaurant, "http://www.smartshanghai.com/listings/dining/dim_sum/"));
-        placeRcmdItemList.add(new PlaceRcmdItem("Recommended Spas in Shanghai",
-                "Shanghai", R.drawable.spas, "https://www.tripadvisor.com/Attractions-g308272-Activities-c40-Shanghai.html"));
-        placeRcmdItemList.add(new PlaceRcmdItem("Shanghai nights and smuggling days",
-                "Shanghai", R.drawable.night, "https://impactnottingham.com/2013/10/shanghai-nights-and-smuggling-days/"));
+        placeRcmdItemList.add(new PlaceRcmdItem("YZN in ECNU",
+                "Shanghai", R.drawable.yzn, "http://www.smartshanghai.com/listings/dining/dim_sum/"));
+        placeRcmdItemList.add(new PlaceRcmdItem("Sports Meeting in ECNU",
+                "Shanghai", R.drawable.sports_meeting, "https://www.tripadvisor.com/Attractions-g308272-Activities-c40-Shanghai.html"));
+        placeRcmdItemList.add(new PlaceRcmdItem("Li wa Restaurant",
+                "Shanghai", R.drawable.liwa_restaurant_1, "https://impactnottingham.com/2013/10/shanghai-nights-and-smuggling-days/"));
+        placeRcmdItemList.add(new PlaceRcmdItem("Autumn in ECNU",
+                "Shanghai", R.drawable.hsd_0, "http://www.timeoutshanghai.com/venue/shops__services-markets/726/south-bund-fabric-market.html"));
+        placeRcmdItemList.add(new PlaceRcmdItem("The 67th Anniversary of ECNU",
+                "Shanghai", R.drawable.anniversary, "www.pretty-hotels.com/2248/?lang=en"));
         placeRcmdItemList.add(new PlaceRcmdItem("A day to the ancient water town",
                 "Shanghai", R.drawable.ancient_watertown, "https://irene-travelogue.com/2011/12/22/a-day-to-the-ancient-watertown/"));
-        placeRcmdItemList.add(new PlaceRcmdItem("In the spotlight South Bund Fabric Market",
-                "Shanghai", R.drawable.fabric_market, "http://www.timeoutshanghai.com/venue/shops__services-markets/726/south-bund-fabric-market.html"));
-        placeRcmdItemList.add(new PlaceRcmdItem("Water house at the Bund, Shanghai/China",
-                "Shanghai", R.drawable.water_house, "www.pretty-hotels.com/2248/?lang=en"));
         recyclerView = view.findViewById(R.id.recycler_view);
         GridLayoutManager layoutManager = new GridLayoutManager(this.getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
