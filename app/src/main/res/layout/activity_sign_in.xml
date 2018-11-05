@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sign_in_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sign_in_background">
+
+    <EditText
+        android:id="@+id/email_edit_text"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_above="@id/email_line_view"
+        android:layout_alignStart="@id/password_edit_text"
+        android:background="@null"
+        android:fontFamily="@font/myriad_pro_italic"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/white"
+        android:textColorHint="#80ffffff"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/email_image_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@id/email_line_view"
+        android:layout_alignStart="@id/email_line_view"
+        android:layout_marginBottom="2dp"
+        android:src="@drawable/login_icon_email" />
+
+    <View
+        android:id="@+id/email_line_view"
+        android:layout_width="295dp"
+        android:layout_height="2dp"
+        android:layout_above="@id/password_image_view"
+        android:layout_alignStart="@id/password_image_view"
+        android:layout_marginBottom="16dp"
+        android:background="#80ffffff" />
+
+    <EditText
+        android:id="@+id/password_edit_text"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:fontFamily="@font/myriad_pro_italic"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="@color/white"
+        android:textColorHint="#80ffffff"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/password_image_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@id/password_edit_text"
+        android:layout_marginEnd="8dp"
+        android:layout_toLeftOf="@id/password_edit_text"
+        android:src="@drawable/login_icon_lock" />
+
+    <View
+        android:id="@+id/password_line_view"
+        android:layout_width="295dp"
+        android:layout_height="2dp"
+        android:layout_below="@id/password_edit_text"
+        android:layout_alignStart="@id/password_image_view"
+        android:layout_marginTop="5dp"
+        android:background="#80ffffff" />
+
+    <Button
+        android:id="@+id/sign_in_button"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/password_line_view"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/login_button_border"
+        android:text="Sign In"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="25sp" />
+
+    <View
+        android:layout_width="200dp"
+        android:layout_height="2dp"
+        android:layout_above="@id/sign_up_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:background="#000000" />
+
+    <TextView
+        android:id="@+id/sign_up_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/myriad_pro_italic"
+        android:text="New here? Sign Up"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+</RelativeLayout>

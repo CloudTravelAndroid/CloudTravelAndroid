@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <color name="colorPrimary">#3F5B69</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!-- common -->
+    <color name="common_bg">#efefef</color>
+    <color name="common_gray_light">#f7f7f8</color>
+    <color name="common_line_grey">#dcdcdc</color>
+    <color name="common_line_item_grey">#c1c1c1</color>
+    <color name="common_tip_bg">#fffbe8</color>
+    <color name="common_divide_line">#dcdcdc</color>
+    <color name="common_white">#ffffff</color>
+    <color name="common_black">#333333</color>
+    <color name="common_red">#ea5505</color>
+    <!-- text -->
+    <color name="text_primary">#333333</color>
+    <color name="text_secondary">#666666</color>
+    <color name="text_tertiary">#999999</color>
+    <color name="text_disable">#999999</color>
+    <color name="text_hint">#c1c1c1</color>
+    <color name="text_tips">#ea5505</color>
+    <color name="text_red">#f66b6b</color>
+    <color name="text_golden">#d7ac62</color>
+    <!-- button -->
+    <color name="button_bg_white">#e5ffffff</color>
+    <color name="button_gray">#999999</color>
+    <color name="button_red">#f66b6b</color>
+
+    <!-- list -->
+    <color name="list_item_bg">#ffffff</color>
+
+    <!-- common color -->
+    <color name="red">#ff0000</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="green">#ff28713f</color>
+    <color name="blue">#ff0000ff</color>
+
+    <color name="my_blue">#2EA9DF</color>
+    <color name="myColor1">#EDDE8B</color>
+    <color name="my_orange">#FBB217</color>
+    <color name="my_grey_blue">#608F9F</color>
+    <color name="my_dark_blue">#014D67</color>
+    <color name="my_green">#00C957</color>
+
+    <color name="bnb_dark_blue">#3F5B69</color>
+    <color name="bnb_blue">#5AB0CB</color>
+    <color name="bnb_light_blue">#9BCFDA</color>
+    <color name="bnb_grey_blue">#A4CADF</color>
+    <color name="bnb_smoke">#6e7376</color>
+    <color name="bnb_powder_blue">#5A81AD</color>
+    <color name="google_green">#3cba54</color>
+    <color name="google_yellow">#f4c20d</color>
+    <color name="google_blue">#4885ed</color>
+    <color name="google_red">#db3236</color>
+
+</resources>

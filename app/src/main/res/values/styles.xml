@@ -1,0 +1,54 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/bnb_blue</item>
+        <item name="colorPrimaryDark">@color/bnb_powder_blue</item>
+        <item name="colorAccent">@color/my_blue</item>
+        <!-- <item name="android:fontFamily">@font/source_code_variable_roman</item> -->
+        <item name="android:fontFamily">@font/myriad_pro_regular</item>
+    </style>
+
+    <style name="LauchAppTheme" parent="AppTheme">
+        <!--<item name="colorPrimaryDark">@android:color/background_dark</item>-->
+    </style>
+
+    <style name="AnimationActivity" mce_bogus="1" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/push_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/push_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/push_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/push_right_out</item>
+    </style>
+
+    <style name="recommend_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="PlaceSelectedActivityTheme" parent="AppTheme">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <!-- widget -->
+    <style name="CommonHLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/common_line_grey</item>
+    </style>
+
+    <style name="Base.Widget.AppCompat.Spinner.Underlined" parent="@style/Base.Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/abc_spinner_textfield_background_material</item>
+    </style>
+
+    <style name="myEditTextStyle">
+        <item name="colorControlNormal">#80ffffff</item>
+        <item name="colorControlActivated">#80ffffff</item>
+    </style>
+
+    <style name="PopupAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/popup_in</item>
+        <item name="android:windowExitAnimation">@anim/popup_out</item>
+    </style>
+
+</resources>
