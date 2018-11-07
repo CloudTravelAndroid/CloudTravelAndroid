@@ -3,7 +3,6 @@ package com.cloudtravel.cloudtravelandroid.main.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,23 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cloudtravel.cloudtravelandroid.R;
-import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseCallBack;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseFragment;
 import com.cloudtravel.cloudtravelandroid.main.activity.AddScheduleActivity;
 import com.cloudtravel.cloudtravelandroid.main.activity.RoadMapActivity;
 import com.cloudtravel.cloudtravelandroid.main.activity.UpdateScheduleActivity;
 import com.cloudtravel.cloudtravelandroid.main.adapter.ScheduleItemAdapter;
-import com.cloudtravel.cloudtravelandroid.main.api.DeleteScheduleApi;
-import com.cloudtravel.cloudtravelandroid.main.api.GetLocationInfoApi;
-import com.cloudtravel.cloudtravelandroid.main.api.GetScheduleApi;
-import com.cloudtravel.cloudtravelandroid.main.dto.Location;
-import com.cloudtravel.cloudtravelandroid.main.dto.Schedule;
+import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
+import com.cloudtravel.cloudtravelandroid.main.dto.ScheduleDTO;
 import com.cloudtravel.cloudtravelandroid.main.item.ScheduleItem;
-import com.cloudtravel.cloudtravelandroid.main.request.DeleteScheduleRequest;
-import com.cloudtravel.cloudtravelandroid.main.request.GetLocationInfoRequest;
-import com.cloudtravel.cloudtravelandroid.main.request.GetScheduleRequest;
-import com.cloudtravel.cloudtravelandroid.main.util.GsonUtil;
-import com.google.gson.reflect.TypeToken;
+import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
 import com.lemon.support.util.DateUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -40,9 +31,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ScheduleFragment extends CloudTravelBaseFragment {
 
     private static final String TAG = "ScheduleFragment";
@@ -51,7 +43,7 @@ public class ScheduleFragment extends CloudTravelBaseFragment {
     private FloatingActionButton addScheduleButton;
     private Button roadMapButton;
     private ScheduleItemAdapter scheduleAdapter;
-    private Date selectedDate;
+    private Date selectedTime;
     private ImageView selectDateImage;
     private TextView selectedDateText;
 
@@ -64,8 +56,8 @@ public class ScheduleFragment extends CloudTravelBaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
-        selectedDate = new Date();
-        //getSchedule(selectedDate);
+        selectedTime = new Date();
+        getSchedule();
         RecyclerView scheduleRecyclerView = view.findViewById(R.id.schedule_recycler_view);
         LinearLayoutManager ScheduleLayoutManager = new LinearLayoutManager(getContext());
         scheduleRecyclerView.setLayoutManager(ScheduleLayoutManager);
@@ -74,19 +66,7 @@ public class ScheduleFragment extends CloudTravelBaseFragment {
         scheduleAdapter.setOnDeleteItemClickListener(new ScheduleItemAdapter.OnDeleteItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ScheduleItem item = scheduleItemList.get(position);
-                int scheduleId = item.getScheduleId();
-                DeleteScheduleRequest request = new DeleteScheduleRequest();
-                request.setScheduleId(scheduleId);
-                addRequest(getService(DeleteScheduleApi.class).doDeleteSchedule(request), new CloudTravelBaseCallBack() {
-                    @Override
-                    public void onSuccess200(Object o) {
-                        Toast.makeText(getContext(), "Deleting Schedule Succeeded!", Toast.LENGTH_SHORT);
-                    }
-                });
-                scheduleItemList.remove(position);
-                scheduleAdapter.notifyItemRemoved(position);
-                scheduleAdapter.notifyItemRangeChanged(position, scheduleItemList.size() - position);
+                deleteSchedule(position);
             }
         });
         scheduleAdapter.setOnUpdateItemClickListener(new ScheduleItemAdapter.OnUpdateItemClickListener() {
@@ -124,7 +104,7 @@ public class ScheduleFragment extends CloudTravelBaseFragment {
 
         selectDateImage = view.findViewById(R.id.select_date_image);
         selectedDateText = view.findViewById(R.id.selected_date_text_view);
-        selectedDateText.setText(DateUtil.date2Str(selectedDate, "YYYY-MM-dd"));
+        selectedDateText.setText(DateUtil.date2Str(selectedTime, "YYYY-MM-dd"));
         selectDateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,57 +115,93 @@ public class ScheduleFragment extends CloudTravelBaseFragment {
                             public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
                                 Calendar calendar = Calendar.getInstance();
                                 calendar.set(year, monthOfYear, dayOfMonth);
-                                selectedDate = DateUtil.str2Date(DateUtil.date2Str(calendar));
-                                //Log.e(TAG,DateUtil.date2Str(selectedDate));
+                                selectedTime = DateUtil.str2Date(DateUtil.date2Str(calendar));
                                 selectedDateText.setText(DateUtil.date2Str(calendar, "YYYY-MM-dd"));
-                                //getSchedule(selectedDate);
+                                getSchedule();
                             }
                         }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show(getFragmentManager(), null);
             }
         });
-
         return view;
     }
 
     @Override
     public void onResume() {
+        getSchedule();
         super.onResume();
     }
 
-    //Get schedules from the database
-    private void getSchedule(Date date) {
-        GetScheduleRequest request = new GetScheduleRequest();
-        request.setDate(DateUtil.date2Str(date));
-        addRequest(getService(GetScheduleApi.class).doGetSchedule(request), new CloudTravelBaseCallBack() {
+    private void getSchedule() {
+        String time = DateUtil.date2Str(selectedTime, DateUtil.FORMAT_YMDHMS);
+        Call<BaseResponse<List<ScheduleDTO>>> call = CloudTravelService.getInstance()
+                .getSchedule(time);
+        call.enqueue(new Callback<BaseResponse<List<ScheduleDTO>>>() {
             @Override
-            public void onSuccess200(Object o) {
-                List<Schedule> dataList = GsonUtil.getEntity(o, new TypeToken<List<Schedule>>() {
-                }.getType());
-                scheduleItemList.clear();
-                for (Schedule schedule : dataList) {
-                    final ScheduleItem item = new ScheduleItem();
-                    item.setPlaceName(schedule.getLocationName());
-                    item.setTime(DateUtil.date2Str(schedule.getDate()));
-                    item.setTypeIconId(R.drawable.place_type_icon_restaurant);
-                    item.setMemo(schedule.getRemark());
-                    item.setScheduleId(schedule.getScheduleId());
-                    GetLocationInfoRequest getLocationInfoRequest = new GetLocationInfoRequest();
-                    int locationId = schedule.getLocationId();
-                    getLocationInfoRequest.setLocationId(locationId);
-                    addRequest(getService(GetLocationInfoApi.class).doGetLocationInfo(getLocationInfoRequest), new CloudTravelBaseCallBack() {
-                        @Override
-                        public void onSuccess200(Object o) {
-                            Location location = GsonUtil.getEntity(o, new TypeToken<Location>() {
-                            }.getType());
-                            item.setLongitude(location.getLongitude());
-                            item.setLatitude(location.getLatitude());
-                            item.setAddress(location.getAddress());
+            public void onResponse(Call<BaseResponse<List<ScheduleDTO>>> call, Response<BaseResponse<List<ScheduleDTO>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getStatus() == 0) {
+                        List<ScheduleDTO> scheduleDTOList = response.body().getObject();
+                        scheduleItemList.clear();
+                        for (ScheduleDTO scheduleDTO : scheduleDTOList) {
+                            final ScheduleItem item = new ScheduleItem();
+                            item.setPlaceName(scheduleDTO.getLocationName());
+                            item.setTime(DateUtil.date2Str(scheduleDTO.getTime()));
+                            item.setTypeIconId(R.drawable.place_type_icon_restaurant);
+                            item.setMemo(scheduleDTO.getMemo());
+                            item.setScheduleId(scheduleDTO.getId());
+                            item.setLatitude(scheduleDTO.getLatitude());
+                            item.setLongitude(scheduleDTO.getLongitude());
+                            scheduleItemList.add(item);
                         }
-                    });
-                    scheduleItemList.add(item);
+                        scheduleAdapter.notifyDataSetChanged();
+                        if (scheduleItemList.size() == 0) {
+                            roadMapButton.setVisibility(View.GONE);
+                        } else {
+                            roadMapButton.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        Toast.makeText(getContext(), response.body().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "未知错误", Toast.LENGTH_SHORT).show();
                 }
-                scheduleAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<List<ScheduleDTO>>> call, Throwable t) {
+                Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void deleteSchedule(final int position) {
+        ScheduleItem item = scheduleItemList.get(position);
+        int scheduleId = item.getScheduleId();
+        Call<BaseResponse> call = CloudTravelService.getInstance().deleteSchedule(scheduleId);
+        call.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getStatus() == 0) {
+                        Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                        scheduleItemList.remove(position);
+                        scheduleAdapter.notifyItemRemoved(position);
+                        scheduleAdapter.notifyItemRangeChanged(position, scheduleItemList.size() - position);
+                    } else {
+                        Toast.makeText(getContext(), response.body().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "未知错误",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
             }
         });
     }

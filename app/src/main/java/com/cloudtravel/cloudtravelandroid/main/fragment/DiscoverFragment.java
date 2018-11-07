@@ -1,6 +1,7 @@
 package com.cloudtravel.cloudtravelandroid.main.fragment;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,15 +23,16 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.bumptech.glide.Glide;
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseFragment;
-import com.cloudtravel.cloudtravelandroid.main.GlideImageLoader;
 import com.cloudtravel.cloudtravelandroid.main.activity.SearchActivity;
 import com.cloudtravel.cloudtravelandroid.main.adapter.PlaceRcmdAdapter;
 import com.cloudtravel.cloudtravelandroid.main.item.PlaceRcmdItem;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
+import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,6 +196,15 @@ public class DiscoverFragment extends CloudTravelBaseFragment {
         }
     }
 
+    class GlideImageLoader extends ImageLoader {
+
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            Glide.with(context).load(path).into(imageView);
+        }
+
+    }
+
     /*public static String ToDBC(String input) {
         char[] c = input.toCharArray();
         for (int i = 0; i< c.length; i++) {
@@ -204,5 +216,4 @@ public class DiscoverFragment extends CloudTravelBaseFragment {
         }
         return new String(c);
     }*/
-
 }

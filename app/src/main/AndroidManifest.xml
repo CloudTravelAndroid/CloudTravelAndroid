@@ -46,7 +46,6 @@
         </activity>
         <activity android:name=".main.activity.SignUpActivity" />
         <activity android:name=".main.activity.RoadMapActivity" />
-        <activity android:name=".main.activity.TestActivity" />
         <activity android:name=".main.activity.WebViewActivity" />
         <activity android:name=".main.activity.SelectUniversityActivity"></activity>
     </application>

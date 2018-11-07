@@ -9,13 +9,20 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudtravel.cloudtravelandroid.R;
+import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
 import com.cloudtravel.cloudtravelandroid.main.dto.ProvinceDTO;
-import com.cloudtravel.cloudtravelandroid.main.dto.UniversityDTO;
+import com.cloudtravel.cloudtravelandroid.main.dto.SimpleUniversityDTO;
+import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SelectUniversityActivity extends AppCompatActivity {
 
@@ -30,7 +37,7 @@ public class SelectUniversityActivity extends AppCompatActivity {
 
     private List<String> dataList = new ArrayList<>();
     private List<ProvinceDTO> provinceList = new ArrayList<>();
-    private List<UniversityDTO> universityList = new ArrayList<>();
+    private List<SimpleUniversityDTO> universityList = new ArrayList<>();
     private ProvinceDTO selectedProvince;
     private int currentLevel;
 
@@ -69,28 +76,100 @@ public class SelectUniversityActivity extends AppCompatActivity {
 
     private void queryProvinces() {
         titleText.setText("中国");
-        // Todo: get province list
+        if (provinceList == null || provinceList.isEmpty()) {
+            showProgressBar();
+            Call<BaseResponse<List<ProvinceDTO>>> call = CloudTravelService.getInstance().getProvinces();
+            call.enqueue(new Callback<BaseResponse<List<ProvinceDTO>>>() {
+                @Override
+                public void onResponse(Call<BaseResponse<List<ProvinceDTO>>> call,
+                                       Response<BaseResponse<List<ProvinceDTO>>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        if (response.body().getStatus() == 0) {
+                            List<ProvinceDTO> provinceDTOS = response.body().getObject();
+                            if (provinceDTOS != null && !provinceDTOS.isEmpty()) {
+                                provinceList = provinceDTOS;
+                                dataList.clear();
+                                for (ProvinceDTO provinceDTO : provinceList) {
+                                    dataList.add(provinceDTO.getName());
+                                }
+                                adapter.notifyDataSetChanged();
+                                listView.setSelection(0);
+                                currentLevel = LEVEL_PROVINCE;
+                                hideProgressBar();
+                            } else {
+                                Toast.makeText(SelectUniversityActivity.this, "检索结果为空",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(SelectUniversityActivity.this,
+                                    response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(SelectUniversityActivity.this, "未知错误",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-        dataList.clear();
-        for (ProvinceDTO provinceDTO : provinceList) {
-            dataList.add(provinceDTO.getName());
+                @Override
+                public void onFailure(Call<BaseResponse<List<ProvinceDTO>>> call, Throwable t) {
+                    Toast.makeText(SelectUniversityActivity.this, "请求失败",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            dataList.clear();
+            for (ProvinceDTO provinceDTO : provinceList) {
+                dataList.add(provinceDTO.getName());
+            }
+            adapter.notifyDataSetChanged();
+            listView.setSelection(0);
+            currentLevel = LEVEL_PROVINCE;
         }
-        adapter.notifyDataSetChanged();
-        listView.setSelection(0);
-        currentLevel = LEVEL_PROVINCE;
     }
 
     private void queryUniversities() {
         titleText.setText(selectedProvince.getName());
-        // Todo: get university list
+        showProgressBar();
+        Call<BaseResponse<List<SimpleUniversityDTO>>> call = CloudTravelService.getInstance()
+                .getSimpleUniversityByProvinceID(selectedProvince.getId());
+        call.enqueue(new Callback<BaseResponse<List<SimpleUniversityDTO>>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<List<SimpleUniversityDTO>>> call,
+                                   Response<BaseResponse<List<SimpleUniversityDTO>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getStatus() == 0) {
+                        List<SimpleUniversityDTO> simpleUniversityDTOS = response.body()
+                                .getObject();
+                        if (simpleUniversityDTOS != null && !simpleUniversityDTOS.isEmpty()) {
+                            dataList.clear();
+                            universityList = simpleUniversityDTOS;
+                            for (SimpleUniversityDTO simpleUniversityDTO : universityList) {
+                                dataList.add(simpleUniversityDTO.getName());
+                            }
+                            adapter.notifyDataSetChanged();
+                            listView.setSelection(0);
+                            currentLevel = LEVEL_UNIVERSITY;
+                            hideProgressBar();
+                        } else {
+                            Toast.makeText(SelectUniversityActivity.this, "检索结果为空",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(SelectUniversityActivity.this,
+                                response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(SelectUniversityActivity.this, "未知错误",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        dataList.clear();
-        for (UniversityDTO universityDTO : universityList) {
-            dataList.add(universityDTO.getName());
-        }
-        adapter.notifyDataSetChanged();
-        listView.setSelection(0);
-        currentLevel = LEVEL_UNIVERSITY;
+            @Override
+            public void onFailure(Call<BaseResponse<List<SimpleUniversityDTO>>> call, Throwable t) {
+                Toast.makeText(SelectUniversityActivity.this, "请求失败",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void showProgressBar() {

@@ -3,6 +3,7 @@ package com.cloudtravel.cloudtravelandroid.main.activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,7 +26,6 @@ import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseActivity;
-import com.cloudtravel.cloudtravelandroid.main.RoadMapDecoration;
 import com.cloudtravel.cloudtravelandroid.main.adapter.RoadMapAdapter;
 import com.cloudtravel.cloudtravelandroid.main.item.ScheduleItem;
 import com.cloudtravel.cloudtravelandroid.main.util.GeoUtil;
@@ -140,7 +140,7 @@ public class RoadMapActivity extends CloudTravelBaseActivity {
             if (zoomNow - distance * 1000 > 0) {
                 level = 18 - i + 6;
                 //设置地图显示级别为计算所得level
-                mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(level).build()));
+                mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(level > 0 ? level - 1 : 0).build()));
                 break;
             }
         }
@@ -148,5 +148,19 @@ public class RoadMapActivity extends CloudTravelBaseActivity {
         LatLng center = new LatLng((maxLatitude + minLatitude) / 2, (maxLongitude + minLongitude) / 2);
         MapStatusUpdate statusUpdate = MapStatusUpdateFactory.newLatLng(center);
         mBaiduMap.animateMapStatus(statusUpdate, 100);
+    }
+
+    class RoadMapDecoration extends RecyclerView.ItemDecoration {
+        /**
+         * @param outRect 边界
+         * @param view    recyclerView ItemView
+         * @param parent  recyclerView
+         * @param state   recycler 内部数据管理
+         */
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            //设定底部边距为1px
+            outRect.set(0, 0, 0, 1);
+        }
     }
 }

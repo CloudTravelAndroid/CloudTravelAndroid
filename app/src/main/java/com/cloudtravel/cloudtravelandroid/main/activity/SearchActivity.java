@@ -37,6 +37,7 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiDetailSearchResult;
 import com.baidu.mapapi.search.poi.PoiIndoorResult;
 import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
@@ -129,13 +130,15 @@ public class SearchActivity extends CloudTravelBaseActivity {
             }
 
             @Override
-            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+            public void onGetPoiDetailResult(PoiDetailSearchResult poiDetailSearchResult) {
+            }
 
+            @Override
+            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
             }
 
             @Override
             public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
-
             }
         };
         mPoiSearch.setOnGetPoiSearchResultListener(poiListener);
@@ -148,8 +151,12 @@ public class SearchActivity extends CloudTravelBaseActivity {
                 LatLng center = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 int radius = 10000;
                 mPoiSearch.searchNearby(new PoiNearbySearchOption()
-                        .keyword(query).sortType(PoiSortType.distance_from_near_to_far)
-                        .location(center).radius(radius).pageCapacity(20).pageNum(0));
+                        .keyword(query)
+                        .sortType(PoiSortType.distance_from_near_to_far)
+                        .location(center)
+                        .radius(radius)
+                        .pageCapacity(20)
+                        .pageNum(0));
                 return false;
             }
 

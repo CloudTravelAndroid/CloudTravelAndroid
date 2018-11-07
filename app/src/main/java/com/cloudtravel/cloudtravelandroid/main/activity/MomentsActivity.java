@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseActivity;
-import com.cloudtravel.cloudtravelandroid.main.request.SignInRequest;
 
 /**
  * Created by KingJ on 2018/10/9.

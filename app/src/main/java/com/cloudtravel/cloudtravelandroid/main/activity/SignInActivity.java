@@ -2,14 +2,25 @@ package com.cloudtravel.cloudtravelandroid.main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseActivity;
+import com.cloudtravel.cloudtravelandroid.main.constant.TokenConstant;
+import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
+import com.cloudtravel.cloudtravelandroid.main.form.UserSignInForm;
+import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
+import com.cloudtravel.cloudtravelandroid.main.util.ContextUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignInActivity extends CloudTravelBaseActivity {
 
@@ -24,7 +35,6 @@ public class SignInActivity extends CloudTravelBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         initView();
-        //test();
     }
 
     private void initView() {
@@ -37,22 +47,7 @@ public class SignInActivity extends CloudTravelBaseActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                SignInRequest request = new SignInRequest();
-//                request.setEmail(emailEditText.getText().toString());
-//                request.setPassword(passwordEditText.getText().toString());
-//                addRequest(getService(SignInApi.class).doSignIn(request), new CloudTravelBaseCallBack() {
-//                    @Override
-//                    public void onSuccess200(Object o) {
-//                        makeToast("登录成功");
-//                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-//                        //Intent intent=new Intent(SignInActivity.this,TestActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                    }
-//                });
-                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                signIn(emailEditText.getText().toString(), passwordEditText.getText().toString());
             }
         });
         signUpTextView.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +55,48 @@ public class SignInActivity extends CloudTravelBaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(intent);
+            }
+        });
+        if (!PreferenceManager.getDefaultSharedPreferences(ContextUtil.getContext())
+                .getString(TokenConstant.TOKEN, "empty").equals("empty")) {
+            Intent intent = new Intent(SignInActivity.this,
+                    MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void signIn(String username, String password) {
+        UserSignInForm signInForm = new UserSignInForm();
+        signInForm.setName(username);
+        signInForm.setPassword(password);
+        Call<BaseResponse<String>> call = CloudTravelService.getInstance().signIn(signInForm);
+        call.enqueue(new Callback<BaseResponse<String>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<String>> call,
+                                   Response<BaseResponse<String>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getStatus() == 0) {
+                        String token = response.body().getObject();
+                        PreferenceManager.getDefaultSharedPreferences(ContextUtil.getContext())
+                                .edit().putString(TokenConstant.TOKEN, token).apply();
+                        Intent intent = new Intent(SignInActivity.this,
+                                MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(ContextUtil.getContext(), response.body().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(ContextUtil.getContext(), "未知错误", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<String>> call, Throwable t) {
+                Toast.makeText(ContextUtil.getContext(), "请求失败", Toast.LENGTH_SHORT).show();
             }
         });
     }

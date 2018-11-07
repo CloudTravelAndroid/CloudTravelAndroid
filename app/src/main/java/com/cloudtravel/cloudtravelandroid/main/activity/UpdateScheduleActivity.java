@@ -6,17 +6,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseActivity;
-import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseCallBack;
-import com.cloudtravel.cloudtravelandroid.main.api.UpdateScheduleApi;
-import com.cloudtravel.cloudtravelandroid.main.request.UpdateScheduleRequest;
+import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
+import com.cloudtravel.cloudtravelandroid.main.form.ScheduleUpdateForm;
+import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
 import com.lemon.support.util.DateUtil;
 
 import org.feezu.liuli.timeselector.TimeSelector;
 
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UpdateScheduleActivity extends CloudTravelBaseActivity {
 
@@ -79,20 +84,35 @@ public class UpdateScheduleActivity extends CloudTravelBaseActivity {
     }
 
     private void updateSchedule() {
-        if (scheduleId == 0) {
-            makeToast("Getting Schedule Information Failed!");
-            return;
-        }
-        UpdateScheduleRequest request = new UpdateScheduleRequest();
-        request.setRemark(memoEditText.getText().toString());
-        StringBuilder date = new StringBuilder(dateText.getText().toString());
-        date.append(":00");
-        request.setDate(date.toString());
-        request.setScheduleId(scheduleId);
-        addRequest(getService(UpdateScheduleApi.class).doUpdateSchedule(request), new CloudTravelBaseCallBack() {
+        ScheduleUpdateForm updateForm = new ScheduleUpdateForm();
+        updateForm.setId(scheduleId);
+        updateForm.setMemo(memoEditText.getText().toString());
+        String time = dateText.getText().toString();
+        time += ":00";
+        updateForm.setTime(time);
+        Call<BaseResponse> call = CloudTravelService.getInstance().updateSchedule(updateForm);
+        call.enqueue(new Callback<BaseResponse>() {
             @Override
-            public void onSuccess200(Object o) {
-                makeToast("Updating Schedule succeeded!");
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getStatus() == 0) {
+                        Toast.makeText(UpdateScheduleActivity.this, "更新成功",
+                                Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(UpdateScheduleActivity.this,
+                                response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(UpdateScheduleActivity.this, "未知错误",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                Toast.makeText(UpdateScheduleActivity.this, "请求失败",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }

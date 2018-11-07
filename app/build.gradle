@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+dependencies{
+    compile files('libs/BaiduLBS_Android.jar')
+}
+
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -15,6 +19,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets{
+        main{
+            jniLibs.srcDir 'libs'
         }
     }
 }
@@ -43,5 +52,6 @@ dependencies {
     compile 'com.feezu.liuli:timeselector:1.1.3+'
     compile 'co.infinum:materialdatetimepicker-support:3.5.1'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
-    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.9'
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
 }
+

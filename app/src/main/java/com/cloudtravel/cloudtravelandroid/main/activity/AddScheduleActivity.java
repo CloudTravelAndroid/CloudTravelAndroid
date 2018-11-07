@@ -10,15 +10,15 @@ import android.widget.Toast;
 
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseActivity;
-import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseCallBack;
-import com.cloudtravel.cloudtravelandroid.main.api.AddLocationApi;
-import com.cloudtravel.cloudtravelandroid.main.api.AddScheduleApi;
-import com.cloudtravel.cloudtravelandroid.main.request.AddLocationRequest;
-import com.cloudtravel.cloudtravelandroid.main.request.AddScheduleRequest;
-import com.cloudtravel.cloudtravelandroid.main.util.GsonUtil;
-import com.google.gson.reflect.TypeToken;
+import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
+import com.cloudtravel.cloudtravelandroid.main.form.ScheduleForm;
+import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
 
 import org.feezu.liuli.timeselector.TimeSelector;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddScheduleActivity extends CloudTravelBaseActivity {
 
@@ -30,9 +30,9 @@ public class AddScheduleActivity extends CloudTravelBaseActivity {
     private Double longitude;
     private EditText memoEditText;
     private FloatingActionButton checkButton;
-    private int locationId;
     private String placeAddress;
     private String placeName;
+    private String placeUID;
     private Button dateButton;
     private TimeSelector timeSelector;
     private TextView dateText;
@@ -60,7 +60,7 @@ public class AddScheduleActivity extends CloudTravelBaseActivity {
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveSchedule();
+                createSchedule();
                 finish();
             }
         });
@@ -71,6 +71,7 @@ public class AddScheduleActivity extends CloudTravelBaseActivity {
             latitude = getIntent().getDoubleExtra("lat", 0.00);
             longitude = getIntent().getDoubleExtra("lng", 0.00);
             placeAddress = getIntent().getStringExtra("address");
+            placeUID = getIntent().getStringExtra("uid");
         }
         dateButton = findViewById(R.id.date_select_button);
         dateButton.setOnClickListener(new View.OnClickListener() {
@@ -88,33 +89,40 @@ public class AddScheduleActivity extends CloudTravelBaseActivity {
         });
     }
 
-    private void saveSchedule() {
-        AddLocationRequest addLocationRequest = new AddLocationRequest();
-        addLocationRequest.setAddress(placeAddress);
-        addLocationRequest.setLatitude(latitude);
-        addLocationRequest.setLongitude(longitude);
-        addLocationRequest.setName(placeName);
-        addRequest(getService(AddLocationApi.class).doAddLocation(addLocationRequest), new CloudTravelBaseCallBack() {
+    private void createSchedule() {
+        ScheduleForm scheduleForm = new ScheduleForm();
+        scheduleForm.setName(placeName);
+        scheduleForm.setAddress(placeAddress);
+        scheduleForm.setLatitude(latitude.toString());
+        scheduleForm.setLongitude(longitude.toString());
+        scheduleForm.setUid(placeUID);
+        scheduleForm.setMemo(memoEditText.getText().toString());
+        String time = dateText.getText().toString();
+        time += ":00";
+        scheduleForm.setTime(time);
+        Call<BaseResponse> call = CloudTravelService.getInstance().createSchedule(scheduleForm);
+        call.enqueue(new Callback<BaseResponse>() {
             @Override
-            public void onSuccess200(Object o) {
-                locationId = GsonUtil.getEntity(o, new TypeToken<Integer>() {
-                }.getType());
-                AddScheduleRequest addScheduleRequest = new AddScheduleRequest();
-                addScheduleRequest.setRemark(memoEditText.getText().toString());
-                addScheduleRequest.setPriority(1);
-                addScheduleRequest.setLocationName(placeName);
-                StringBuilder date = new StringBuilder(dateText.getText().toString());
-                date.append(":00");
-                addScheduleRequest.setDate(date.toString());
-                addScheduleRequest.setLatitude(latitude);
-                addScheduleRequest.setLongitude(longitude);
-                addScheduleRequest.setLocationId(locationId);
-                addRequest(getService(AddScheduleApi.class).doAddSchedule(addScheduleRequest), new CloudTravelBaseCallBack() {
-                    @Override
-                    public void onSuccess200(Object o) {
-                        Toast.makeText(AddScheduleActivity.this, "Adding Schedule Succeeded!", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getStatus() == 0) {
+                        Toast.makeText(AddScheduleActivity.this, "创建成功",
+                                Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(AddScheduleActivity.this,
+                                response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                } else {
+                    Toast.makeText(AddScheduleActivity.this, "未知错误",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                Toast.makeText(AddScheduleActivity.this, "请求失败", Toast.LENGTH_SHORT)
+                        .show();
             }
         });
     }

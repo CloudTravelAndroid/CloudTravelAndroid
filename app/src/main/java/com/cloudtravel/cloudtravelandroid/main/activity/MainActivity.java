@@ -2,6 +2,7 @@ package com.cloudtravel.cloudtravelandroid.main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -18,23 +19,27 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseActivity;
-import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseCallBack;
-import com.cloudtravel.cloudtravelandroid.main.api.UserInfoApi;
-import com.cloudtravel.cloudtravelandroid.main.dto.User;
+import com.cloudtravel.cloudtravelandroid.main.constant.TokenConstant;
+import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
 import com.cloudtravel.cloudtravelandroid.main.fragment.DiscoverFragment;
 import com.cloudtravel.cloudtravelandroid.main.fragment.MomentsFragment;
 import com.cloudtravel.cloudtravelandroid.main.fragment.ScheduleFragment;
-import com.cloudtravel.cloudtravelandroid.main.util.GsonUtil;
+import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
+import com.cloudtravel.cloudtravelandroid.main.util.ContextUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends CloudTravelBaseActivity implements BottomNavigationBar.OnTabSelectedListener {
 
@@ -55,7 +60,6 @@ public class MainActivity extends CloudTravelBaseActivity implements BottomNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        //Log.e(TAG, DateUtil.date2Str(new Date()));
     }
 
     private void initView() {
@@ -92,25 +96,23 @@ public class MainActivity extends CloudTravelBaseActivity implements BottomNavig
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.logout:
-                        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-                        startActivity(intent);
-                        finish();
+                        logOut();
                         return true;
                     case R.id.nav_settings:
 
-                        return true;
+                        return false;
                     case R.id.nav_profile:
 
-                        return true;
+                        return false;
                     case R.id.nav_followed:
 
-                        return true;
+                        return false;
                     case R.id.nav_following:
 
-                        return true;
+                        return false;
                     case R.id.nav_collect:
 
-                        return true;
+                        return false;
                     default:
                         return false;
                 }
@@ -127,8 +129,6 @@ public class MainActivity extends CloudTravelBaseActivity implements BottomNavig
                 startActivity(intent);
             }
         });
-        //getUserInfo();
-
     }
 
     @Override
@@ -246,14 +246,32 @@ public class MainActivity extends CloudTravelBaseActivity implements BottomNavig
         toolBarTitle.setText(id);
     }
 
-    private void getUserInfo() {
-        addRequest(getService(UserInfoApi.class).doGetUserInfo(), new CloudTravelBaseCallBack() {
+    private void logOut() {
+        Call<BaseResponse> call = CloudTravelService.getInstance().logOut();
+        call.enqueue(new Callback<BaseResponse>() {
             @Override
-            public void onSuccess200(Object o) {
-                User user = GsonUtil.getEntity(o, new com.google.common.reflect.TypeToken<User>() {
-                }.getType());
-                emailText.setText(user.getEmail());
-                userNameText.setText(user.getUserName());
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getStatus() == 0) {
+                        PreferenceManager.getDefaultSharedPreferences(ContextUtil.getContext())
+                                .edit().remove(TokenConstant.TOKEN).apply();
+                        Intent intent = new Intent(MainActivity.this,
+                                SignInActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(ContextUtil.getContext(), response.body().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(ContextUtil.getContext(), "未知错误", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                Toast.makeText(ContextUtil.getContext(), "请求失败", Toast.LENGTH_SHORT).show();
             }
         });
     }
