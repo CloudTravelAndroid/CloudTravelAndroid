@@ -69,19 +69,23 @@ public interface CloudTravelAPI {
     Call<BaseResponse> updateSchedule(@Body ScheduleUpdateForm scheduleUpdateForm);
 
     @POST("moments/latest")
+    @FormUrlEncoded
     Call<BaseResponse<List<MomentsDTO>>> getLatestMoments(@Field("size") Integer size);
 
     @POST("moments/me")
+    @FormUrlEncoded
     Call<BaseResponse<List<MomentsDTO>>> getLatestUserRelatedMoments(@Field("size") Integer size);
 
     @POST("moments")
     Call<BaseResponse> createMoments(@Body MomentsForm momentsForm);
 
     @POST("moments/comments")
+    @FormUrlEncoded
     Call<BaseResponse<List<MomentsCommentDTO>>> getMomentsCommentsByMomentsID(
             @Field("momentsID") Integer momentsID, @Field("size") Integer size);
 
     @POST("moments/actions/delete")
+    @FormUrlEncoded
     Call<BaseResponse> deleteMoments(@Field("momentsID") Integer momentsID);
 
     @POST("moments/comments/actions/create")

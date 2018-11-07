@@ -9,7 +9,7 @@ import lombok.Data;
 public class MomentsItem {
 
     private int momentId;
-    private int username;
+    private String username;
     private Date time;
     private String content;
     private String university;

@@ -1,23 +1,29 @@
 package com.cloudtravel.cloudtravelandroid.main.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseFragment;
 import com.cloudtravel.cloudtravelandroid.main.adapter.MomentsItemAdapter;
+import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
+import com.cloudtravel.cloudtravelandroid.main.dto.MomentsDTO;
 import com.cloudtravel.cloudtravelandroid.main.item.MomentsItem;
+import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MomentsFragment extends CloudTravelBaseFragment {
 
@@ -25,6 +31,8 @@ public class MomentsFragment extends CloudTravelBaseFragment {
     private TextView nameText;
     private CircleImageView headPortraitImage;
     private List<MomentsItem> momentItemList = new ArrayList<>();
+    private final int size = 15;
+    MomentsItemAdapter momentItemAdapter;
 
     public MomentsFragment() {
         // Required empty public constructor
@@ -42,16 +50,10 @@ public class MomentsFragment extends CloudTravelBaseFragment {
         recyclerViewMoments = view.findViewById(R.id.moments);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewMoments.setLayoutManager(layoutManager);
-        MomentsItemAdapter momentItemAdapter = new MomentsItemAdapter(momentItemList);
+        momentItemAdapter = new MomentsItemAdapter(momentItemList);
         recyclerViewMoments.setAdapter(momentItemAdapter);
-
+        getMoments();
         return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
     }
 
     public void getMoments() {
@@ -73,5 +75,40 @@ public class MomentsFragment extends CloudTravelBaseFragment {
 //            momentItemList.add(momentItem);
 //        }
 
+        Call<BaseResponse<List<MomentsDTO>>> call = CloudTravelService.getInstance()
+                .getLatestMoments(size);
+        call.enqueue(new Callback<BaseResponse<List<MomentsDTO>>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<List<MomentsDTO>>> call, Response<BaseResponse<List<MomentsDTO>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getStatus() == 0) {
+                        List<MomentsDTO> momentsDTOS = response.body().getObject();
+                        if (momentsDTOS != null && !momentsDTOS.isEmpty()) {
+                            momentItemList.clear();
+                            for (MomentsDTO momentsDTO : momentsDTOS) {
+                                MomentsItem momentsItem = new MomentsItem();
+                                momentsItem.setContent(momentsDTO.getContent());
+                                momentsItem.setTime(momentsDTO.getTime());
+                                momentsItem.setUniversity(momentsDTO.getUniversity());
+                                momentsItem.setUsername(momentsDTO.getUsername());
+                                momentsItem.setImageUrlList(momentsDTO.getImageUrls());
+                                momentItemList.add(momentsItem);
+                            }
+                            momentItemAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Toast.makeText(getContext(), response.body().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "未知错误", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<List<MomentsDTO>>> call, Throwable t) {
+                Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

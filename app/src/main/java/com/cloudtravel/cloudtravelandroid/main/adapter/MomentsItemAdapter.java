@@ -31,13 +31,9 @@ public class MomentsItemAdapter extends RecyclerView.Adapter<MomentsItemAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MomentsItem momentItem = mMomentItemList.get(position);
-        //holder.locationText.setText(momentItem.getLocation());
-        //DateFormat dateFormat= DateFormat.getDateInstance(DateFormat.FULL, Locale.US);
-        //holder.timeText.setText(dateFormat.format(new Date()));
         holder.timeText.setText(DateUtil.date2Str(new Date(), "YYYY-MM-dd HH:mm"));
         holder.contentText.setText(momentItem.getContent());
-        holder.nameText.setText(momentItem.getName());
-        //to be continued...
+        holder.nameText.setText(momentItem.getUsername());
 
     }
 
@@ -51,7 +47,6 @@ public class MomentsItemAdapter extends RecyclerView.Adapter<MomentsItemAdapter.
         TextView nameText;
         TextView contentText;
         TextView timeText;
-        TextView locationText;
 
         public ViewHolder(View view) {
             super(view);
