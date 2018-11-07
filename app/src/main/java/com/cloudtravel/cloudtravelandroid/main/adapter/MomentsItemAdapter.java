@@ -13,6 +13,7 @@ import com.lemon.support.util.DateUtil;
 import java.util.Date;
 import java.util.List;
 
+import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MomentsItemAdapter extends RecyclerView.Adapter<MomentsItemAdapter.ViewHolder> {
@@ -47,6 +48,7 @@ public class MomentsItemAdapter extends RecyclerView.Adapter<MomentsItemAdapter.
         TextView nameText;
         TextView contentText;
         TextView timeText;
+        BGANinePhotoLayout ninePhotoLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -54,6 +56,7 @@ public class MomentsItemAdapter extends RecyclerView.Adapter<MomentsItemAdapter.
             nameText = view.findViewById(R.id.moments_item_name);
             contentText = view.findViewById(R.id.moments_item_content);
             timeText = view.findViewById(R.id.moments_item_time);
+            ninePhotoLayout = view.findViewById(R.id.npl_item_moment_photos);
         }
     }
 }

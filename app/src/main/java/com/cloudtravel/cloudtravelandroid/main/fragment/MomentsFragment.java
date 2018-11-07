@@ -1,6 +1,9 @@
 package com.cloudtravel.cloudtravelandroid.main.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,28 +14,36 @@ import android.widget.Toast;
 
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseFragment;
-import com.cloudtravel.cloudtravelandroid.main.adapter.MomentsItemAdapter;
+import com.cloudtravel.cloudtravelandroid.main.activity.CreateMomentsActivity;
 import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
 import com.cloudtravel.cloudtravelandroid.main.dto.MomentsDTO;
 import com.cloudtravel.cloudtravelandroid.main.item.MomentsItem;
 import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
+import com.lemon.support.util.DateUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bingoogolapple.baseadapter.BGARecyclerViewAdapter;
+import cn.bingoogolapple.baseadapter.BGAViewHolderHelper;
+import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
+import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MomentsFragment extends CloudTravelBaseFragment {
+public class MomentsFragment extends CloudTravelBaseFragment implements BGANinePhotoLayout.Delegate {
 
     private RecyclerView recyclerViewMoments;
     private TextView nameText;
     private CircleImageView headPortraitImage;
+    private final int SIZE = 15;
+
     private List<MomentsItem> momentItemList = new ArrayList<>();
-    private final int size = 15;
-    MomentsItemAdapter momentItemAdapter;
+    private FloatingActionButton floatingActionButton;
+    private MomentsAdapter momentsAdapter;
 
     public MomentsFragment() {
         // Required empty public constructor
@@ -48,35 +59,41 @@ public class MomentsFragment extends CloudTravelBaseFragment {
         nameText = view.findViewById(R.id.moments_name);
         headPortraitImage = view.findViewById(R.id.moments_item_head_portrait);
         recyclerViewMoments = view.findViewById(R.id.moments);
+        floatingActionButton = view.findViewById(R.id.post_moments_button);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), CreateMomentsActivity.class);
+                startActivity(intent);
+            }
+        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewMoments.setLayoutManager(layoutManager);
-        momentItemAdapter = new MomentsItemAdapter(momentItemList);
-        recyclerViewMoments.setAdapter(momentItemAdapter);
+        momentsAdapter = new MomentsAdapter(recyclerViewMoments);
+        recyclerViewMoments.setAdapter(momentsAdapter);
         getMoments();
         return view;
     }
 
-    public void getMoments() {
-//        for (int i = 0; i < 4; i++) {
-//            MomentsItem momentItem = new MomentsItem();
-//            momentItem.setContent("It was an impromptu call up to Shanghai but nevertheless, I had a " +
-//                    "worthwhile trip to QiBao Ancient Watertown. There is lots of photo opportunity found " +
-//                    "in this quaint little thousand year old town, where you can still find antique buildings" +
-//                    " from the Northern Song Dynasty. May I suggest having an empty stomach when you visit " +
-//                    "this ancient water town. If not, you will be missing out on some good local snacks. It " +
-//                    "was so good that I had two baskets by myself. I am a Xiao Long Bao’s lover! I " +
-//                    "am a Chinese and I like my food to be served pipping hot! I always miss our Asian food " +
-//                    "when I am in European countries. And an interesting thing that I have noticed is that " +
-//                    "they do not provide shredded ginger and spoon in China. So…Does that mean the authentic " +
-//                    "way of eating Xiao Long Bao is without shredded ginger and spoon?");
-//            momentItem.setCreateTime(new Date());
-//            momentItem.setLocation("Shanghai, China");
-//            momentItem.setName("Irene");
-//            momentItemList.add(momentItem);
-//        }
+    @Override
+    public void onClickNinePhotoItem(BGANinePhotoLayout ninePhotoLayout, View view, int position,
+                                     String model, List<String> models) {
+        File downloadDir = new File(Environment.getExternalStorageDirectory(),
+                "BGAPhotoPickerDownload");
+        BGAPhotoPreviewActivity.IntentBuilder photoPreviewIntentBuilder = new
+                BGAPhotoPreviewActivity.IntentBuilder(getContext()).saveImgDir(downloadDir);
+        if (ninePhotoLayout.getItemCount() == 1) {
+            photoPreviewIntentBuilder.previewPhoto(ninePhotoLayout.getCurrentClickItem());
+        } else if (ninePhotoLayout.getItemCount() > 1) {
+            photoPreviewIntentBuilder.previewPhotos(ninePhotoLayout.getData())
+                    .currentPosition(ninePhotoLayout.getCurrentClickItemPosition());
+        }
+        startActivity(photoPreviewIntentBuilder.build());
+    }
 
+    public void getMoments() {
         Call<BaseResponse<List<MomentsDTO>>> call = CloudTravelService.getInstance()
-                .getLatestMoments(size);
+                .getLatestMoments(SIZE);
         call.enqueue(new Callback<BaseResponse<List<MomentsDTO>>>() {
             @Override
             public void onResponse(Call<BaseResponse<List<MomentsDTO>>> call, Response<BaseResponse<List<MomentsDTO>>> response) {
@@ -94,7 +111,7 @@ public class MomentsFragment extends CloudTravelBaseFragment {
                                 momentsItem.setImageUrlList(momentsDTO.getImageUrls());
                                 momentItemList.add(momentsItem);
                             }
-                            momentItemAdapter.notifyDataSetChanged();
+                            momentsAdapter.setData(momentItemList);
                         }
                     } else {
                         Toast.makeText(getContext(), response.body().getMessage(),
@@ -110,5 +127,23 @@ public class MomentsFragment extends CloudTravelBaseFragment {
                 Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private class MomentsAdapter extends BGARecyclerViewAdapter<MomentsItem> {
+
+        public MomentsAdapter(RecyclerView recyclerView) {
+            super(recyclerView, R.layout.moments_item);
+        }
+
+        @Override
+        protected void fillData(BGAViewHolderHelper helper, int position, MomentsItem momentsItem) {
+            BGANinePhotoLayout ninePhotoLayout = helper.getView(R.id.npl_item_moment_photos);
+            ninePhotoLayout.setDelegate(MomentsFragment.this);
+            ninePhotoLayout.setData((ArrayList<String>) momentsItem.getImageUrlList());
+            helper.setText(R.id.moments_item_name, momentsItem.getUsername());
+            helper.setText(R.id.moments_item_content, momentsItem.getContent());
+            helper.setText(R.id.moments_item_time, DateUtil.date2Str(momentsItem.getTime(),
+                    "YYYY-MM-dd HH:mm"));
+        }
     }
 }

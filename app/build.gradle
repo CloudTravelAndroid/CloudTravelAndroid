@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-dependencies{
+dependencies {
     compile files('libs/BaiduLBS_Android.jar')
 }
 
@@ -21,8 +21,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets{
-        main{
+    sourceSets {
+        main {
             jniLibs.srcDir 'libs'
         }
     }
@@ -53,5 +53,6 @@ dependencies {
     compile 'co.infinum:materialdatetimepicker-support:3.5.1'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
+    implementation 'cn.bingoogolapple:bga-photopicker:1.2.8@aar'
+    implementation 'cn.bingoogolapple:bga-baseadapter:1.2.7@aar'
 }
-
