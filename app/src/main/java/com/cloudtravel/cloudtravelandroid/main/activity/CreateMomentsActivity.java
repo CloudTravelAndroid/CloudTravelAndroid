@@ -11,9 +11,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.cloudtravel.cloudtravelandroid.R;
+import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
+import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,6 +26,12 @@ import java.util.List;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerPreviewActivity;
 import cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CreateMomentsActivity extends AppCompatActivity implements
         BGASortableNinePhotoLayout.Delegate {
@@ -33,12 +43,16 @@ public class CreateMomentsActivity extends AppCompatActivity implements
     private BGASortableNinePhotoLayout ninePhotoLayout;
     private Button cancelButton;
     private Button postButton;
+    private EditText editText;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_moments);
 
+        progressBar = findViewById(R.id.progress_bar);
+        editText = findViewById(R.id.edit_text);
         ninePhotoLayout = findViewById(R.id.add_photos);
         cancelButton = findViewById(R.id.button_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +65,54 @@ public class CreateMomentsActivity extends AppCompatActivity implements
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String content = editText.getText().toString();
+                if (content.isEmpty()) {
+                    Toast.makeText(CreateMomentsActivity.this, "内容不能为空",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                showProgressBar();
+                List<String> imageList = ninePhotoLayout.getData();
+                final List<MultipartBody.Part> files = new ArrayList<>();
+                if (imageList != null && imageList.size() > 0) {
+                    for (int i = 0; i < imageList.size(); i++) {
+                        File file = new File(imageList.get(i));
+                        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"),
+                                file);
+                        MultipartBody.Part part = MultipartBody.Part.createFormData("images",
+                                file.getName(), requestFile);
+                        files.add(part);
+                    }
+                }
+                Call<BaseResponse> call = CloudTravelService.getInstance().
+                        createMoments(content, null, files);
+                call.enqueue(new Callback<BaseResponse>() {
+                    @Override
+                    public void onResponse(Call<BaseResponse> call,
+                                           Response<BaseResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            if (response.body().getStatus() == 0) {
+                                Toast.makeText(CreateMomentsActivity.this, "发布成功",
+                                        Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                Toast.makeText(CreateMomentsActivity.this,
+                                        response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(CreateMomentsActivity.this, "未知错误",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        hideProgressBar();
+                    }
 
+                    @Override
+                    public void onFailure(Call<BaseResponse> call, Throwable t) {
+                        Toast.makeText(CreateMomentsActivity.this, "请求失败",
+                                Toast.LENGTH_SHORT).show();
+                        hideProgressBar();
+                    }
+                });
             }
         });
         ninePhotoLayout.setDelegate(this);
@@ -152,5 +213,13 @@ public class CreateMomentsActivity extends AppCompatActivity implements
                 break;
             default:
         }
+    }
+
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
     }
 }

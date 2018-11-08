@@ -9,7 +9,6 @@ import com.cloudtravel.cloudtravelandroid.main.dto.SimpleUniversityDTO;
 import com.cloudtravel.cloudtravelandroid.main.dto.UniversityDTO;
 import com.cloudtravel.cloudtravelandroid.main.dto.UserDTO;
 import com.cloudtravel.cloudtravelandroid.main.form.MomentsCommentForm;
-import com.cloudtravel.cloudtravelandroid.main.form.MomentsForm;
 import com.cloudtravel.cloudtravelandroid.main.form.ScheduleForm;
 import com.cloudtravel.cloudtravelandroid.main.form.ScheduleUpdateForm;
 import com.cloudtravel.cloudtravelandroid.main.form.UserSignInForm;
@@ -17,12 +16,15 @@ import com.cloudtravel.cloudtravelandroid.main.form.UserSignUpForm;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface CloudTravelAPI {
@@ -76,8 +78,11 @@ public interface CloudTravelAPI {
     @FormUrlEncoded
     Call<BaseResponse<List<MomentsDTO>>> getLatestUserRelatedMoments(@Field("size") Integer size);
 
+    @Multipart
     @POST("moments")
-    Call<BaseResponse> createMoments(@Body MomentsForm momentsForm);
+    Call<BaseResponse> createMoments(@Part("content") String content,
+                                     @Part("universityID") Integer universityID,
+                                     @Part List<MultipartBody.Part> images);
 
     @POST("moments/comments")
     @FormUrlEncoded

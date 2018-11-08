@@ -76,6 +76,12 @@ public class MomentsFragment extends CloudTravelBaseFragment implements BGANineP
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getMoments();
+    }
+
+    @Override
     public void onClickNinePhotoItem(BGANinePhotoLayout ninePhotoLayout, View view, int position,
                                      String model, List<String> models) {
         File downloadDir = new File(Environment.getExternalStorageDirectory(),
