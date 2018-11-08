@@ -3,6 +3,9 @@ package com.cloudtravel.cloudtravelandroid.main.item;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import lombok.Data;
+
+@Data
 public class ScheduleItem implements Parcelable {
     public static final Parcelable.Creator<ScheduleItem> CREATOR = new Creator<ScheduleItem>() {
         @Override
@@ -37,70 +40,6 @@ public class ScheduleItem implements Parcelable {
 
     public ScheduleItem() {
 
-    }
-
-    public String getMemo() {
-        return memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getPlaceName() {
-        return placeName;
-    }
-
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
-    }
-
-    public int getTypeIconId() {
-        return typeIconId;
-    }
-
-    public void setTypeIconId(int typeIconId) {
-        this.typeIconId = typeIconId;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public int getScheduleId() {
-        return scheduleId;
-    }
-
-    public void setScheduleId(int scheduleId) {
-        this.scheduleId = scheduleId;
     }
 
     @Override

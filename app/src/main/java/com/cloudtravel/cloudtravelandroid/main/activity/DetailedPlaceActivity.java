@@ -27,8 +27,8 @@ import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseActivity;
 
 import java.util.List;
 
-public class PlaceDetailedActivity extends CloudTravelBaseActivity {
-    private static final String TAG = "PlaceDetailedActivity";
+public class DetailedPlaceActivity extends CloudTravelBaseActivity {
+    private static final String TAG = "DetailedPlaceActivity";
 
     private ImageView collectImage;
     private ImageView searchAroundImage;
@@ -66,7 +66,7 @@ public class PlaceDetailedActivity extends CloudTravelBaseActivity {
         scheduleImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlaceDetailedActivity.this, AddScheduleActivity.class);
+                Intent intent = new Intent(DetailedPlaceActivity.this, AddScheduleActivity.class);
                 intent.putExtra("name", placeName);
                 intent.putExtra("lat", latLng.latitude);
                 intent.putExtra("lng", latLng.longitude);
@@ -87,13 +87,13 @@ public class PlaceDetailedActivity extends CloudTravelBaseActivity {
             @Override
             public void onGetPoiDetailResult(PoiDetailSearchResult poiDetailSearchResult) {
                 if (poiDetailSearchResult.error != SearchResult.ERRORNO.NO_ERROR) {
-                    Toast.makeText(PlaceDetailedActivity.this, "获取详情失败",
+                    Toast.makeText(DetailedPlaceActivity.this, "获取详情失败",
                             Toast.LENGTH_SHORT).show();
                 } else {
                     List<PoiDetailInfo> poiDetailInfoList = poiDetailSearchResult
                             .getPoiDetailInfoList();
                     if (poiDetailInfoList == null || poiDetailInfoList.isEmpty()) {
-                        Toast.makeText(PlaceDetailedActivity.this, "检索结果为空",
+                        Toast.makeText(DetailedPlaceActivity.this, "检索结果为空",
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -101,7 +101,7 @@ public class PlaceDetailedActivity extends CloudTravelBaseActivity {
                     if (poiDetailInfo != null) {
                         if (poiDetailInfo.getStreetId() != null
                                 && !poiDetailInfo.getStreetId().isEmpty()) {
-                            Glide.with(PlaceDetailedActivity.this).
+                            Glide.with(DetailedPlaceActivity.this).
                                     load(poiDetailInfo.getStreetId()).into(placeImage);
                         }
                         placeNameText.setText(poiDetailInfo.getName());

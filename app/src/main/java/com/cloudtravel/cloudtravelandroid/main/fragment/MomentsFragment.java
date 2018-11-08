@@ -15,8 +15,10 @@ import android.widget.Toast;
 import com.cloudtravel.cloudtravelandroid.R;
 import com.cloudtravel.cloudtravelandroid.base.CloudTravelBaseFragment;
 import com.cloudtravel.cloudtravelandroid.main.activity.CreateMomentsActivity;
+import com.cloudtravel.cloudtravelandroid.main.activity.DetailedMomentsActivity;
 import com.cloudtravel.cloudtravelandroid.main.dto.BaseResponse;
 import com.cloudtravel.cloudtravelandroid.main.dto.MomentsDTO;
+import com.cloudtravel.cloudtravelandroid.main.dto.UserDTO;
 import com.cloudtravel.cloudtravelandroid.main.item.MomentsItem;
 import com.cloudtravel.cloudtravelandroid.main.service.CloudTravelService;
 import com.lemon.support.util.DateUtil;
@@ -34,7 +36,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MomentsFragment extends CloudTravelBaseFragment implements BGANinePhotoLayout.Delegate {
+public class MomentsFragment extends CloudTravelBaseFragment
+        implements BGANinePhotoLayout.Delegate {
 
     private RecyclerView recyclerViewMoments;
     private TextView nameText;
@@ -71,7 +74,7 @@ public class MomentsFragment extends CloudTravelBaseFragment implements BGANineP
         recyclerViewMoments.setLayoutManager(layoutManager);
         momentsAdapter = new MomentsAdapter(recyclerViewMoments);
         recyclerViewMoments.setAdapter(momentsAdapter);
-        getMoments();
+        getUsername();
         return view;
     }
 
@@ -97,12 +100,13 @@ public class MomentsFragment extends CloudTravelBaseFragment implements BGANineP
         startActivity(photoPreviewIntentBuilder.build());
     }
 
-    public void getMoments() {
+    private void getMoments() {
         Call<BaseResponse<List<MomentsDTO>>> call = CloudTravelService.getInstance()
                 .getLatestMoments(SIZE);
         call.enqueue(new Callback<BaseResponse<List<MomentsDTO>>>() {
             @Override
-            public void onResponse(Call<BaseResponse<List<MomentsDTO>>> call, Response<BaseResponse<List<MomentsDTO>>> response) {
+            public void onResponse(Call<BaseResponse<List<MomentsDTO>>> call,
+                                   Response<BaseResponse<List<MomentsDTO>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     if (response.body().getStatus() == 0) {
                         List<MomentsDTO> momentsDTOS = response.body().getObject();
@@ -135,6 +139,31 @@ public class MomentsFragment extends CloudTravelBaseFragment implements BGANineP
         });
     }
 
+    private void getUsername() {
+        Call<BaseResponse<UserDTO>> call = CloudTravelService.getInstance().getUserInfo();
+        call.enqueue(new Callback<BaseResponse<UserDTO>>() {
+            @Override
+            public void onResponse(Call<BaseResponse<UserDTO>> call, Response<BaseResponse<UserDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getStatus() == 0) {
+                        UserDTO userDTO = response.body().getObject();
+                        nameText.setText(userDTO.getName());
+                    } else {
+                        Toast.makeText(getContext(), response.body().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "未知错误", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse<UserDTO>> call, Throwable t) {
+                Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private class MomentsAdapter extends BGARecyclerViewAdapter<MomentsItem> {
 
         public MomentsAdapter(RecyclerView recyclerView) {
@@ -150,6 +179,23 @@ public class MomentsFragment extends CloudTravelBaseFragment implements BGANineP
             helper.setText(R.id.moments_item_content, momentsItem.getContent());
             helper.setText(R.id.moments_item_time, DateUtil.date2Str(momentsItem.getTime(),
                     "YYYY-MM-dd HH:mm"));
+            final MomentsItem item = momentsItem;
+            helper.getView(R.id.card_view).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ;
+                    Intent intent = new Intent(getContext(), DetailedMomentsActivity.class);
+                    intent.putExtra(DetailedMomentsActivity.USERNAME,
+                            nameText.getText().toString());
+                    intent.putExtra(DetailedMomentsActivity.NAME, item.getUsername());
+                    intent.putExtra(DetailedMomentsActivity.TIME, item.getTime());
+                    intent.putExtra(DetailedMomentsActivity.CONTENT, item.getContent());
+                    intent.putExtra(DetailedMomentsActivity.ID, item.getMomentId());
+                    intent.putStringArrayListExtra(DetailedMomentsActivity.PHOTOS,
+                            (ArrayList<String>) item.getImageUrlList());
+                    startActivity(intent);
+                }
+            });
         }
     }
 }

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cloudtravel.cloudtravelandroid.R;
-import com.cloudtravel.cloudtravelandroid.main.activity.PlaceDetailedActivity;
+import com.cloudtravel.cloudtravelandroid.main.activity.DetailedPlaceActivity;
 import com.cloudtravel.cloudtravelandroid.main.item.SearchResultItem;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class SearchResultItemAdapter extends RecyclerView.Adapter<SearchResultIt
                 int position = holder.getAdapterPosition();
                 SearchResultItem searchResultItem = mSearchResultItemList.get(position);
                 String uid = searchResultItem.getUid();
-                Intent intent = new Intent(mContext, PlaceDetailedActivity.class);
+                Intent intent = new Intent(mContext, DetailedPlaceActivity.class);
                 intent.putExtra("uid", uid);
                 mContext.startActivity(intent);
             }

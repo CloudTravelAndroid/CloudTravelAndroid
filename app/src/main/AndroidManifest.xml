@@ -34,7 +34,7 @@
         <activity android:name=".main.activity.MainActivity" />
         <activity android:name=".main.activity.SearchActivity" />
         <activity
-            android:name=".main.activity.PlaceDetailedActivity"
+            android:name=".main.activity.DetailedPlaceActivity"
             android:theme="@style/PlaceSelectedActivityTheme" />
         <activity android:name=".main.activity.AddScheduleActivity" />
         <activity android:name=".main.activity.UpdateScheduleActivity" />
@@ -51,7 +51,8 @@
         <activity android:name=".main.activity.SelectUniversityActivity" />
         <activity
             android:name=".main.activity.CreateMomentsActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".main.activity.DetailedMomentsActivity"></activity>
     </application>
 
 </manifest>

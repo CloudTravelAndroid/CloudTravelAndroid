@@ -297,7 +297,7 @@ public class SearchActivity extends CloudTravelBaseActivity {
         public boolean onPoiClick(int i) {
             super.onPoiClick(i);
             String uid = getPoiResult().getAllPoi().get(i).uid;
-            Intent intent = new Intent(SearchActivity.this, PlaceDetailedActivity.class);
+            Intent intent = new Intent(SearchActivity.this, DetailedPlaceActivity.class);
             intent.putExtra("uid", uid);
             startActivity(intent);
             return true;
