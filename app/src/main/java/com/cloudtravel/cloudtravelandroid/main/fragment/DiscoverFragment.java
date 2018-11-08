@@ -126,11 +126,8 @@ public class DiscoverFragment extends CloudTravelBaseFragment {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 StringBuilder currentPosition = new StringBuilder();
-                //Log.e(TAG,"latitude:"+bdLocation.getLatitude()+" longtitude: "+bdLocation.getLongitude()+" "
-                // +bdLocation.getProvince()+" "+bdLocation.getCity()+" "+bdLocation.getDistrict()+" "
-                // +bdLocation.getStreet());
                 currentPosition.append(bdLocation.getCity());
-                currentCityText.setText(currentPosition);
+                //currentCityText.setText(currentPosition);
             }
         });
         SDKInitializer.initialize(getContext().getApplicationContext());
