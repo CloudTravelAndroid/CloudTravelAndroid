@@ -48,6 +48,8 @@
         <activity android:name=".main.activity.SignUpActivity" />
         <activity android:name=".main.activity.RoadMapActivity" />
         <activity android:name=".main.activity.WebViewActivity" />
+        <activity android:name=".main.activity.UpdateProfileActivity" >
+        </activity>
         <activity android:name=".main.activity.SelectUniversityActivity" />
         <activity
             android:name=".main.activity.CreateMomentsActivity"

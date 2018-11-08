@@ -1,5 +1,6 @@
 package com.cloudtravel.cloudtravelandroid.main.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -58,6 +59,11 @@ public class SelectUniversityActivity extends AppCompatActivity {
                 if (currentLevel == LEVEL_PROVINCE) {
                     selectedProvince = provinceList.get(i);
                     queryUniversities();
+                }
+                else if ( currentLevel == LEVEL_UNIVERSITY){
+                    Intent intent = new Intent(SelectUniversityActivity.this,
+                            MainActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -128,6 +134,7 @@ public class SelectUniversityActivity extends AppCompatActivity {
     }
 
     private void queryUniversities() {
+
         titleText.setText(selectedProvince.getName());
         showProgressBar();
         Call<BaseResponse<List<SimpleUniversityDTO>>> call = CloudTravelService.getInstance()

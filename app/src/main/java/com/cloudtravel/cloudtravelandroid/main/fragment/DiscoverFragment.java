@@ -98,11 +98,11 @@ public class DiscoverFragment extends CloudTravelBaseFragment {
         banner.start();
 
         placeRcmdItemList.add(new PlaceRcmdItem("Zhenning Yang in ECNU",
-                "Shanghai", R.drawable.yzn, "http://www.smartshanghai.com/listings/dining/dim_sum/"));
-        placeRcmdItemList.add(new PlaceRcmdItem("67th Anniversary of ECNU",
-                "Shanghai", R.drawable.anniversary, "www.pretty-hotels.com/2248/?lang=en"));
+                "Shanghai", R.drawable.yzn, "http://news.ecnu.edu.cn/d4/ed/c1833a185581/page.htm"));
+        placeRcmdItemList.add(new PlaceRcmdItem("ECNUer won the gold award of 'Internet +'",
+                "Shanghai", R.drawable.Internet, "http://news.ecnu.edu.cn/d5/b2/c1833a185778/page.htm"));
         placeRcmdItemList.add(new PlaceRcmdItem("2018 Sports Meeting in ECNU",
-                "Shanghai", R.drawable.sports_meeting, "https://www.tripadvisor.com/Attractions-g308272-Activities-c40-Shanghai.html"));
+                "Shanghai", R.drawable.sports_meeting, "http://news.ecnu.edu.cn/ff/c3/c1838a196547/page.htm"));
         placeRcmdItemList.add(new PlaceRcmdItem("Liwa Restaurant",
                 "Shanghai", R.drawable.liwa_restaurant_1, "https://impactnottingham.com/2013/10/shanghai-nights-and-smuggling-days/"));
         placeRcmdItemList.add(new PlaceRcmdItem("Autumn in ECNU",
